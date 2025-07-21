@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFT SHOWCASE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #1a1c2c;
+      --bg-light: #2d2755;
+      --pixel-border: #3e4377;
+      --text-primary: #e2f3e4;
+      --text-secondary: #44d492;
+      --accent-1: #ff7b89;
+      --accent-2: #6e45e2;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Oxanium', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: var(--bg-light);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    h1 {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    #close-btn {
+ position: absolute;
+  
+  top: 10px;
+  right:10px; /* This will move it 10px up from its parent's top edge */
+      background: rgba(255, 123, 137, 0.3);
+      border: 2px solid var(--accent-1);
+      color: var(--text-primary);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #close-btn:hover {
+      background: var(--accent-1);
+      transform: rotate(90deg);
+    }
+    
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    .data-table th {
+      background-color: var(--accent-2);
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--pixel-border);
+    }
+    
+    .data-table tr:nth-child(even) {
+      background-color: rgba(69, 71, 108, 0.4);
+    }
+    
+    .data-table tr:hover {
+      background-color: rgba(110, 69, 226, 0.2);
+    }
+    
+    .nft-image {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 4px;
+      border: 1px solid var(--pixel-border);
+    }
+    
+    .nft-image-preview {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      border: 2px solid var(--pixel-border);
+      border-radius: 8px;
+    }
+    
+    .image-preview-container {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .image-preview-container .preview-tooltip {
+      visibility: hidden;
+      position: absolute;
+      z-index: 100;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      margin-bottom: 10px;
+    }
+    
+    .image-preview-container:hover .preview-tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    .wallet-address {
+      font-family: monospace;
+      font-size: 14px;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+    }
+    
+    .loading-dot {
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      background-color: var(--text-secondary);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    
+    @media (max-width: 768px) {
+      .data-table {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      .nft-image {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .nft-image-preview {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NFT SHOWCASE</h1>
+    <button id="close-btn" title="Close">×</button>
+    
+    <div id="loadingIndicator" class="loading">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+    
+    <div id="tableContainer" style="display: none;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>NFT Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Token ID</th>
+            <th>Quantity</th>
+            <th>Owner</th>
+            <th>Last Updated</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithCustomToken,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+  import {
+    getDatabase,
+    ref,
+    get
+  } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBP-5FVS6XtraM5a5L5TDi9HguJNL-r_3I",
+    authDomain: "terrabuchi.firebaseapp.com",
+    databaseURL: "https://terrabuchi-default-rtdb.firebaseio.com",
+    projectId: "terrabuchi",
+    storageBucket: "terrabuchi.firebasestorage.app",
+    messagingSenderId: "765877243373",
+    appId: "1:765877243373:web:b7f225df14615aa5da2be4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  const walletAddress = localStorage.getItem('walletAddress');
+  const firebaseToken = localStorage.getItem('firebaseToken');
+console.log("walletAddress",walletAddress);
+console.log("firebaseToken",firebaseToken);
+  if (!walletAddress || !firebaseToken) {
+    alert("Missing login data. Please connect wallet.");
+   // window.location.href = 'game.html';
+  } else {
+    console.log("🔐 Signing in...");
+    signInWithCustomToken(auth, firebaseToken).then(() => {
+      console.log("✅ Token accepted");
+
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          console.error("❌ User not authenticated");
+          return;
+        }
+
+        console.log("🧠 Authenticated as:", user.uid);
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const tableContainer = document.getElementById('tableContainer');
+        const tableBody = document.getElementById('tableBody');
+
+        loadingIndicator.style.display = 'flex';
+        tableContainer.style.display = 'none';
+
+        const refPath = `players/${walletAddress.toLowerCase()}/assets`;
+        const assetsRef = ref(db, refPath);
+
+        get(assetsRef).then(snapshot => {
+          loadingIndicator.style.display = 'none';
+          if (!snapshot.exists()) {
+            alert("No NFT assets found for your wallet.");
+            return;
+          }
+
+          const assets = snapshot.val();
+          const allNFTs = [];
+
+          for (const key in assets) {
+            const asset = assets[key];
+            allNFTs.push({
+              id: key,
+              name: asset.name || 'Unnamed NFT',
+              description: asset.description || 'No description',
+              image: asset.image || '',
+              tokenId: asset.tokenId || 'N/A',
+              quantity: asset.quantity || 1,
+              owner: walletAddress,
+              lastUpdated: formatTimestamp(asset.lastUpdated)
+            });
+          }
+
+          displayNFTs(allNFTs);
+          tableContainer.style.display = 'block';
+        }).catch(err => {
+          loadingIndicator.style.display = 'none';
+          console.error("🔥 DB error:", err.code, err.message);
+          alert("Database error: " + err.message);
+        });
+      });
+
+    }).catch(err => {
+      console.error("🔥 Auth failed:", err.code, err.message);
+      alert("Firebase authentication failed.");
+      window.location.href = 'game.html';
+    });
+  }
+
+  function formatTimestamp(timestamp) {
+    if (!timestamp) return 'Unknown';
+    try {
+      const date = new Date(timestamp);
+      return isNaN(date.getTime()) ? timestamp : date.toLocaleString();
+    } catch {
+      return timestamp;
+    }
+  }
+
+  function displayNFTs(nfts) {
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+
+    if (nfts.length === 0) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 7;
+      cell.textContent = 'No NFTs found';
+      cell.style.textAlign = 'center';
+      row.appendChild(cell);
+      tableBody.appendChild(row);
+      return;
+    }
+
+    nfts.forEach(nft => {
+      const row = document.createElement('tr');
+
+      const imageCell = document.createElement('td');
+      if (nft.image) {
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'image-preview-container';
+        const img = document.createElement('img');
+        img.className = 'nft-image';
+        img.src = nft.image;
+        img.alt = nft.name;
+        const tooltip = document.createElement('div');
+        tooltip.className = 'preview-tooltip';
+        const previewImg = document.createElement('img');
+        previewImg.className = 'nft-image-preview';
+        previewImg.src = nft.image;
+        previewImg.alt = nft.name;
+        tooltip.appendChild(previewImg);
+        imgContainer.appendChild(img);
+        imgContainer.appendChild(tooltip);
+        imageCell.appendChild(imgContainer);
+      } else {
+        imageCell.textContent = 'No image';
+      }
+      row.appendChild(imageCell);
+
+      const nameCell = document.createElement('td');
+      nameCell.textContent = nft.name;
+      row.appendChild(nameCell);
+
+      const descCell = document.createElement('td');
+      descCell.textContent = nft.description;
+      row.appendChild(descCell);
+
+      const tokenCell = document.createElement('td');
+      tokenCell.textContent = nft.tokenId;
+      row.appendChild(tokenCell);
+
+      const qtyCell = document.createElement('td');
+      qtyCell.textContent = nft.quantity;
+      row.appendChild(qtyCell);
+
+      const ownerCell = document.createElement('td');
+      const ownerSpan = document.createElement('span');
+      ownerSpan.className = 'wallet-address';
+      ownerSpan.textContent = nft.owner;
+      ownerCell.appendChild(ownerSpan);
+      row.appendChild(ownerCell);
+
+      const dateCell = document.createElement('td');
+      dateCell.textContent = nft.lastUpdated;
+      row.appendChild(dateCell);
+
+      tableBody.appendChild(row);
+    });
+  }
+</script>
+
+
+
+ <script>
+document.getElementById('close-btn').addEventListener('click', function(e) {
+  e.stopPropagation(); // Prevent other listeners from blocking
+  e.preventDefault();
+  
+
+
+  // Only redirect after animation completes
+  
+    console.log('Redirecting now...');
+    // Use absolute path to be sure
+    window.location.href = './game.html'; 
+    // Or try this if above doesn't work:
+    // window.location.pathname = '/assets.html';
+
+});
+</script>
+</body>
+</html>
