@@ -120,7 +120,8 @@ The deployment scripts for the smart contracts are located in the `modules` fold
     npx hardhat run scripts/deploy.js --network blockdag
 
 ## Demo Video
-[Watch the Demo](https://youtu.be/oSYh54pezxc)
+[Watch the Demo Short Version(Under 3 min)](https://youtu.be/oSYh54pezxc)
+[Watch the Demo Long Version](https://youtu.be/BzKaRIS_oWg)
 
 ## Contributors
 - [ROOOPRAJ MURMU](https://github.com/Roopraj591)
