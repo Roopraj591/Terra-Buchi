@@ -88,6 +88,37 @@ The following smart contracts are included in this project:
 
 These contracts are located in the `contracts` folder.
 
+## Deployment Scripts
+
+The deployment scripts for the smart contracts are located in the `modules` folder. These scripts automate the process of deploying the contracts to the blockchain.
+
+### Prerequisites
+1. Install [Node.js](https://nodejs.org/).
+2. Install Hardhat globally or locally in the project:
+   ```bash
+   npm install --save-dev hardhat
+
+### How to Use the Deployment Scripts
+1. Navigate to the `modules` folder:
+   ```bash
+   cd modules
+
+2. Install dependencies 
+   ```bash
+    npm install
+
+3. Compile the smart contracts:
+   ```bash
+    npm install
+
+4. Deploy the contracts to a local Hardhat network:
+   ```bash
+    npx hardhat run scripts/deploy.js
+
+5. To deploy to a specific network (e.g., Ethereum testnet or mainnet), use:
+   ```bash
+    npx hardhat run scripts/deploy.js --network blockdag
+
 ## Demo Video
 [Watch the Demo](https://youtu.be/oSYh54pezxc)
 
