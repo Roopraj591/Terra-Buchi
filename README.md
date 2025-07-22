@@ -15,7 +15,7 @@ A blockchain-based game where players can explore, interact, and mint NFTs using
 ## Tech Stack
 - **Frontend**: HTML, CSS, JavaScript, Phaser.js
 - **Backend**: Node.js, Express, Firebase Admin SDK
-- **Blockchain**: Ethereum, ethers.js
+- **Blockchain**: BlockDAG, ethers.js
 - **Hosting**: Firebase Hosting and Functions
 
 ## Setup Instructions
@@ -115,7 +115,7 @@ The deployment scripts for the smart contracts are located in the `modules` fold
    ```bash
     npx hardhat run scripts/deploy.js
 
-5. To deploy to a specific network (e.g., Ethereum testnet or mainnet), use:
+5. To deploy to the blockDAG testnet use:
    ```bash
     npx hardhat run scripts/deploy.js --network blockdag
 
