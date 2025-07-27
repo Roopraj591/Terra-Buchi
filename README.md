@@ -11,6 +11,7 @@ A blockchain-based game where players can explore, interact, and mint NFTs using
 - Smart contract interaction for minting NFTs.
 - Phaser.js-powered game mechanics.
 - Deployed on Firebase Hosting and Functions.
+- Used pyodide to use the HeatOfMixingCalculator.py in the frontend
 
 ## Tech Stack
 - **Frontend**: HTML, CSS, JavaScript, Phaser.js
@@ -45,9 +46,12 @@ A blockchain-based game where players can explore, interact, and mint NFTs using
 1. Open the [Live Demo](https://terrabuchi.web.app).
 2. Click "Connect Wallet" to authenticate using MetaMask.
 3. Explore the game world and interact with objects by pressing space to dig holes and mint nft/fts and enter enterkey to interact with the npc.
-4. Mint NFTs directly from the game interface.
-5. See you assets on the My Assets page
-6. View all the minted nft's by all the players on the server in the NFT Showcase section
+4. To mint the unique alloy nft's you have to first defeat an enemy.
+5. You can select your weapons during game before battle scene by pressing X.
+6. During battle you can drag and drop the alloys into the weapons to increase the damage dealt on the enemy.
+7. Mint NFTs directly from the game interface.
+8. See you assets on the My Assets page
+9. View all the minted nft's by all the players on the server in the NFT Showcase section
 
 ## Contract Addresses
 
@@ -55,12 +59,11 @@ Add your deployed contract addresses here:
 
 
 - **elements.sol**: `0x4AeCB4C9231CA32Be97ED4826891e1CDF91589C6`
-- **GameFTs.sol**: `0xc761fF121D22544E6a21bBC81BED29F95120eE4d`
-- **BDAG.sol**: `0xa0847326c94EC729946D9c2CC78baDa78df6b224`
-- **GameWeapon.sol**: `0x6E0Af682c0741660B35126F6Aabf51D6666Bf4dD`
+- **GameFTs.sol**: `0x28fBab7EE35D72C7c654D6931ce1b108FEf83DE2`
+- **BDAG.sol**: `0x12CBa3319D391e97932E10E97aE82B3603aB2Ffa`
+- **GameWeapon.sol**: `0x9D3acD8efD67078bfDFdB82BD5b9aaE863Aa13Ff`
 - **VRFCoordinatorV2Mock.sol**: `0x524460F4862Ad0a296BB6854AB388C192a21B398`
-- **elements.sol**: `0x4AeCB4C9231CA32Be97ED4826891e1CDF91589C6`
-- **mintAlloy.sol**: `0xa29F2bFAEA444fCA2F3C1e7E3340F5d2Fd1ca121`
+- **mintAlloy.sol**: `0x2be9a62b05f29b645Ad55a665339b841D5bE35a7`
 
 
 ## Smart Contracts
@@ -120,8 +123,7 @@ The deployment scripts for the smart contracts are located in the `modules` fold
     npx hardhat run scripts/deploy.js --network blockdag
 
 ## Demo Video
-[Watch the Demo Short Version(Under 3 min)](https://youtu.be/oSYh54pezxc)
-[Watch the Demo Long Version](https://youtu.be/BzKaRIS_oWg)
+[Watch the Demo Short Version(Under 3 min)](https://youtu.be/Qq_LS96P2Og)
 
 ## Contributors
 - [ROOOPRAJ MURMU](https://github.com/Roopraj591)
